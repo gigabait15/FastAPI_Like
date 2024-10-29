@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import (
     BaseModel,
     EmailStr,
@@ -13,5 +14,9 @@ class SUserView(BaseModel):
     gender: str = Field(...)
     avatar: str = Field(...)
     data_create_user: datetime
+    distance: Optional[float] = None
+
+    class Config:
+        orm_mode = True
 
 
