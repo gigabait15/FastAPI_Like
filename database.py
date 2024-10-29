@@ -1,8 +1,9 @@
 from typing import Annotated
-from sqlalchemy import Enum
+from enum import Enum
 from sqlalchemy.ext.asyncio import (
     create_async_engine,
-    AsyncAttrs
+    AsyncAttrs,
+    AsyncSession
 )
 from sqlalchemy.orm import (
     sessionmaker,
@@ -16,7 +17,11 @@ DATABASE_URL = settings.get_db_url()
 
 engine = create_async_engine(DATABASE_URL, echo=True)
 
-async_session = sessionmaker(engine, expire_on_commit=False)
+async_session_maker = sessionmaker(
+    engine,
+    class_=AsyncSession,
+    expire_on_commit=False
+)
 
 # настройка аннотаций
 int_pk = Annotated[int, mapped_column(primary_key=True)]
