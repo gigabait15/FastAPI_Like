@@ -1,3 +1,7 @@
+from typing import (
+    Optional,
+    List
+)
 from fastapi import (
     APIRouter,
     HTTPException,
@@ -5,11 +9,12 @@ from fastapi import (
     UploadFile,
     File,
     Form,
-    Response
+    Response,
+    Depends,
+    Query
 )
 from pydantic import EmailStr
 from fastapi.responses import JSONResponse
-
 from database import Gender
 from users.auth import (
     get_password_hash,
@@ -17,13 +22,15 @@ from users.auth import (
     create_access_token
 )
 from users.dao import UsersDAO
+from users.dependencies import get_current_user
+from users.models import User
 from users.schemas import SUserView
 from utils.img_watermark import watermark_photo
 
-router = APIRouter(prefix='/api/clients', tags=['users'])
+router = APIRouter(prefix='/api', tags=['users'])
 
 
-@router.post('/registration/')
+@router.post('/clients/create/')
 async def create_users(
         email: EmailStr = Form(...),
         first_name: str = Form(...),
@@ -61,6 +68,7 @@ async def create_users(
         last_name=created_user.last_name,
         gender=created_user.gender,
         avatar=created_user.avatar,
+        data_create_user = created_user.data_create_user,
     )
     return user_view
 
@@ -82,3 +90,35 @@ async def logout_user(response: Response):
     response.delete_cookie(key="users_access_token")
     return {'message': 'Пользователь успешно вышел из системы'}
 
+@router.get("/me/", response_model=SUserView)
+async def get_profile(current_user: User = Depends(get_current_user)):
+    return SUserView(
+        email=current_user.email,
+        first_name=current_user.first_name,
+        last_name=current_user.last_name,
+        gender=current_user.gender,
+        avatar=current_user.avatar,
+        data_create_user=current_user.data_create_user
+    )
+
+@router.get("/list/", response_model=List[SUserView])
+async def get_users(
+    first_name: Optional[str] = Query(default=None),
+    last_name: Optional[str] = Query(default=None),
+    gender: Optional[str] = Query(default=None),
+    sort_by_date: Optional[bool] = Query(default=True)
+):
+    filters = {}
+    if first_name:
+        filters["first_name"] = first_name
+    if last_name:
+        filters["last_name"] = last_name
+    if gender:
+        filters["gender"] = gender
+
+    users = await UsersDAO.find_all(sort_by_date=sort_by_date, **filters)
+
+    if not users:
+        raise HTTPException(status_code=404, detail="No users found")
+
+    return users

@@ -1,6 +1,15 @@
 from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
-from database import Base, str_uniq, int_pk, Gender
+from sqlalchemy.orm import (
+    Mapped,
+    mapped_column
+)
+from database import (
+    Base,
+    str_uniq,
+    int_pk,
+    Gender,
+    created_at
+)
 
 
 class User(Base):
@@ -12,6 +21,7 @@ class User(Base):
     last_name: Mapped[str]
     gender: Mapped[Gender]
     avatar: Mapped[str] = mapped_column(String)
+    data_create_user: Mapped[created_at]
 
 
     extend_existing = True

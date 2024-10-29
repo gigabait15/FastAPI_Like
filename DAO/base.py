@@ -1,20 +1,27 @@
 from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 from database import async_session_maker
+from sqlalchemy import desc
 
 
 class BaseDAO:
     model = None
 
     @classmethod
-    async def find_all(cls, **filter_by):
+    async def find_all(cls, sort_by_date: bool = True, **filter_by):
         """
-        Функция для получение всех объекто с таблицы
-        :param filter_by: необязательный параметр, в случае передачи будет поиск по указанному фильтру
-        :return: возвращает все объекты из таблицы
+        Функция для получения всех объектов из таблицы с возможностью фильтрации и сортировки.
+        :param filter_by: фильтры для поиска
+        :param sort_by_date: если True, сортирует по дате создания от новых к старым
+        :return: возвращает отфильтрованные и отсортированные объекты из таблицы
         """
         async with async_session_maker() as session:
             query = select(cls.model).filter_by(**filter_by)
+
+            # Добавляем сортировку по дате создания
+            if sort_by_date:
+                query = query.order_by(desc(cls.model.data_create_user))
+
             result = await session.execute(query)
             return result.scalars().all()
 
