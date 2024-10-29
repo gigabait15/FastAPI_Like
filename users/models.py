@@ -1,4 +1,4 @@
-from sqlalchemy import Enum, String
+from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column
 from database import Base, str_uniq, int_pk, Gender
 
@@ -10,7 +10,7 @@ class User(Base):
     password: Mapped[str]
     first_name: Mapped[str]
     last_name: Mapped[str]
-    gender: Mapped[Gender] = mapped_column(Enum(Gender))
+    gender: Mapped[Gender]
     avatar: Mapped[str] = mapped_column(String)
 
 
