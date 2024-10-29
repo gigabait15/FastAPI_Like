@@ -22,6 +22,8 @@ class User(Base):
     gender: Mapped[Gender]
     avatar: Mapped[str] = mapped_column(String)
     data_create_user: Mapped[created_at]
+    latitude: Mapped[float]
+    longitude: Mapped[float]
 
 
     extend_existing = True
