@@ -3,6 +3,7 @@ from pydantic import (
     EmailStr,
     Field,
 )
+from datetime import datetime
 
 
 class SUserView(BaseModel):
@@ -11,5 +12,6 @@ class SUserView(BaseModel):
     last_name: str = Field(...)
     gender: str = Field(...)
     avatar: str = Field(...)
+    data_create_user: datetime
 
 

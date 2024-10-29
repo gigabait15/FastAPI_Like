@@ -1,5 +1,7 @@
+from datetime import datetime
 from typing import Annotated
 from enum import Enum
+from sqlalchemy import func
 from sqlalchemy.ext.asyncio import (
     create_async_engine,
     AsyncAttrs,
@@ -27,6 +29,7 @@ async_session_maker = sessionmaker(
 int_pk = Annotated[int, mapped_column(primary_key=True)]
 str_uniq = Annotated[str, mapped_column(unique=True, nullable=False)]
 str_null_true = Annotated[str, mapped_column(nullable=True)]
+created_at = Annotated[datetime, mapped_column(server_default=func.now())]
 
 class Gender(str, Enum):
     men = "men"
