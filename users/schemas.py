@@ -15,8 +15,7 @@ class SUserView(BaseModel):
     avatar: str = Field(...)
     data_create_user: datetime
     distance: Optional[float] = None
+    list_grade_history: Optional[list] = []
 
-    class Config:
-        orm_mode = True
 
 

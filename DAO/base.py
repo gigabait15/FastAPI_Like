@@ -1,5 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import joinedload
+
 from database import async_session_maker
 from sqlalchemy import desc
 
@@ -33,9 +35,9 @@ class BaseDAO:
         :return: объект из таблицы по указанному id
         """
         async with async_session_maker() as session:
-            query = select(cls.model).filter_by(id=item_id)
+            query = select(cls.model).filter_by(id=item_id).options(joinedload(cls.model.list_grade_history))
             result = await session.execute(query)
-            return result.scalar_one_or_none()
+            return result.scalars().first()
 
     @classmethod
     async def find_one_or_none(cls, **filter_by):
