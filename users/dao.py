@@ -1,8 +1,4 @@
-from sqlalchemy.orm import joinedload
-from DAO.base import BaseDAO
-from database import async_session_maker
-from users.models import User
-from sqlalchemy import select, desc
+from users.setting_import.dao_import import *
 
 
 class UsersDAO(BaseDAO):

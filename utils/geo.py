@@ -1,10 +1,4 @@
-import httpx
-from shapely.geometry import Point
-import math
-from typing import Union
-
-
-EARTH_CIRCUMFERENCE = 6378137  # окружность Земли в метрах [1](https://gist.github.com/gabesmed/1826175)
+from utils_import.geo_import import *
 
 
 async def get_geo(location: str) -> dict:
