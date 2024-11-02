@@ -1,4 +1,4 @@
-from utils_import.watermark_import import *
+from utils.utils_import.watermark_import import *
 
 async def watermark_photo(input_image: UploadFile, output_image_name: str):
     loop = asyncio.get_running_loop()

@@ -1,4 +1,4 @@
-from utils_import.se_import import *
+from utils.utils_import.se_import import *
 
 
 async def send_email_notification(user1, user2):

@@ -1,4 +1,4 @@
-from utils_import.geo_import import *
+from utils.utils_import.geo_import import *
 
 
 async def get_geo(location: str) -> dict:
