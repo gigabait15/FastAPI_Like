@@ -1,10 +1,4 @@
-from typing import Optional
-from pydantic import (
-    BaseModel,
-    EmailStr,
-    Field,
-)
-from datetime import datetime
+from users.setting_import.schemas_import import *
 
 
 class SUserView(BaseModel):
